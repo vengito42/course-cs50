@@ -1,0 +1,77 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if message != Null %}
+        <ul>
+            <li>{{ message }}</li>
+        </ul>
+    {% endif %}
+
+
+    <h2>Listing: {{ obj }}</h2>
+
+    {% if product.img.url != None %}
+        <img src="{{ product.img.url }}" alt="Product Image">
+    {% else %}
+        <img src="/media/no-product-image.png" alt="Not Available Image">
+    {% endif %}
+
+    <p>{{ product.content }}</p>
+    <strong>Initial Bid: ${{ product.price }}</strong><p>Last bid: ${{last_bid}}</p>
+
+    {% if user.is_authenticated %}
+        <form action="{% url 'newbid' product.pk %}">
+            <input type="number" name="new_bid">
+            <input type="submit" value="Bid">
+        </form>
+
+        <form action="{% url 'product' product.pk %}" method="post">
+            {% csrf_token %}
+            {{ formWatchlist }}
+            <input type="submit" value="Add WatchList">
+        </form>
+    {% endif %}
+
+
+    <h4>Details</h4>
+    <ul>
+        <li>Listed by: {{ product.user }}</li>
+        <li>Category:
+
+            {% if product.category != None %}
+                <a href="{% url 'index' %}?q={{ product.category }}">{{ product.category }}</a>
+            {% else %}
+                <p>No Category Listed</p>
+            {% endif %}
+    
+        </li>
+    </ul>
+
+    {% if user == product.user %}
+        <form action="{% url 'product' product.pk %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="active" value="False">
+            <input type="submit" value="Close Listing">
+        </form>
+    {% endif %}
+    
+    <h5>Comments:</h5>
+    {% if request.user.is_authenticated %}
+        <div class="comment-form">
+            <form action="{% url 'product' product.pk %}" method="POST">
+                {% csrf_token %}
+                <input type="text" name="comment" placeholder="Write your comment here...">
+            </form>
+        </div>
+        <hr>
+    {% endif %}
+    {% for comment in comments %}
+        <strong>@{{ comment.user }}:    </strong><small>{{ comment.created | timesince }} ago</small>
+        <p>{{ comment.content }}</p>
+        <hr>
+    {% empty %}
+        <p>No comments.</p>
+    {% endfor %}
+
+
+{% endblock %}

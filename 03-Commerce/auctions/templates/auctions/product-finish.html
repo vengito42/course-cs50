@@ -1,0 +1,13 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+    <h2>Listing: {{ product }}</h2>
+
+    <strong>This listing doesn't active.
+        {% if product.winner_id == request.user.pk %}
+            You are the winner.
+        {% else %}
+            Someone else won. Sorry :(  !!
+        {% endif %}
+    </strong>
+
+{% endblock %}

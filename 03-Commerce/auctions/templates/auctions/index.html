@@ -1,0 +1,44 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <style>
+            .home-container{
+                display: grid;
+                grid-template-columns: 1fr 3fr
+
+            }
+    </style>
+
+    <div class="home-container">
+
+        <div>
+            <h3>Categories</h3>
+            <ul>
+                <li><a href="{% url 'index' %}">All</a></li>
+                {% for category in categories %}
+                    <li><a href="{% url 'index' %}?q={{ category.name }}">{{ category.name }}</a></li>
+                {% endfor %}
+            </ul>
+
+
+        </div>
+
+        <div>
+            <h2>Active Listings</h2>
+            <ul>
+                {% for product in products %}
+                    <li>
+                        <div class= >
+                            <a href="{% url 'product' product.pk %}">{{ product.name }}</a>, {{ product.content }}, {{ product.price }},
+
+                            {% if product.img.url != None %}
+                                <img src="{{ product.img.url }}" alt="Product Image">
+                            {% endif %}
+                        </div>
+                    </li>
+                    <p>------------------------------</p>
+                {% endfor %}
+            </ul>
+        </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+        {% if message == None %}
+            <form action="{% url 'newbid' obj.pk %}" method="post">
+                {% csrf_token %}
+                <p>Are you sure you want to push ${{ new_bid }} in {{obj.name}}?</p>
+                <a href="{{ request.META.HTTP_REFERER }}">Go Back</a>
+                <input type="submit" value="Confirm" >
+            </form>
+        {% else %}
+            <strong>{{ message }}</strong>
+            <p>Your bid: ${{ new_bid }}</p>
+            <p>Price: ${{obj.price}}</p>
+            <p>Last bid: ${{ last_bid }}</p>
+        {% endif %}
+{% endblock %}
