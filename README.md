@@ -1,2 +1,2 @@
 # course-cs50
-All projects i did in this course
+All projects i am doing in this course
